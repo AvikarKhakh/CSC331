@@ -31,8 +31,8 @@ def run_task_one(n: int, bits: int = WORD_BITS) -> str:
     mask_bits = (~0) ^ (~0 << bits)
     n_masked = n & mask_bits
 
-    print(f"decimal n: {n}")
-    print(f"masked n: {to_binary(n, bits)}")
+    print(f"Decimal n: {n}")
+    print(f"Masked n: {to_binary(n, bits)}")
 
     bit_values = []
 
@@ -55,12 +55,19 @@ def subtract_four_bits(a: int, b: int, *, wrap: bool = False) -> int:
 
     # add two 4-bit integers using bitwise operations within the 4-bit limit
     def add4(x: int, y: int) -> int:
-        x &= mask
-        y &= mask
+        x = x & mask
+        y = y & mask
+        
+        # loop until there is no carry
         while y != 0:
-            s = (x ^ y) & mask
-            c = ((x & y) << 1) & mask
-            x, y = s, c
+            # calculate sum and carry within 4 bit width
+            sum = (x ^ y) & mask
+            # left shift carry and mask to 4 bit width
+            carry = ((x & y) << 1) & mask
+            # x becomes sum, y becomes carry
+            x = sum 
+            y = carry
+        
         return x
     
     # mask inputs to 4 bit width
